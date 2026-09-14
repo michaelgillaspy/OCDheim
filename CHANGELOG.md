@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.2.4
+
+### Fixes
+- Fix: Compatibility with Valheim 1.0
+	- `TerrainComp.PaintCleared` Harmony patch updated for its new signature
+	- "Remove Terrain Modifications" Hoe piece registered with Valheim 1.0's new `TerrainOp` networking table, fixing a "Failed to deserialize TerrainOp settings" error that cancelled the operation
+
 ## Version 0.2.3
 
 ### Improvements

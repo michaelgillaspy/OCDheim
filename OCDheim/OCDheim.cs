@@ -19,7 +19,7 @@ namespace OCDheim
     {
         public const string GUID = "dymek.dev.OCDheim";
         private const string Name = "OCDheim";
-        private const string Version = "0.2.3";
+        private const string Version = "0.2.4";
 
         public static AssetBundle resourceBundle { get; } = LoadResourceBundle();
         private Texture2D brick1x1 { get; } = LoadTextureFromDisk("brick_1x1.png");
@@ -76,34 +76,61 @@ namespace OCDheim
             Refresher.Of(PrecisionDrill.floorLevels);
         }
 
+        // TerrainOp prefabs registered by OCDheim, kept alive here so RegisterCustomTerrainOps
+        // can (re-)add them to ObjectDB every time it rebuilds its terrain-op lookup table.
+        private static readonly System.Collections.Generic.List<TerrainOp> customTerrainOps = new System.Collections.Generic.List<TerrainOp>();
+
         private void AddOCDheimToolPieces()
         {
-            //AddToolPiece<UndoModificationsOverlayVisualizer>("Undo Terrain Modification", "mud_road_v2", "Hoe", OverlayVisualizer.undo);
-            //AddToolPiece<RedoModificationsOverlayVisualizer>("Redo Terrain Modification", "mud_road_v2", "Hoe", OverlayVisualizer.redo);
-            AddToolPiece<RemoveModificationsOverlayVisualizer>("Remove Terrain Modifications", "mud_road_v2", "Hoe", OverlayVisualizer.remove);
+            //AddToolPiece<UndoModificationsOverlayVisualizer>("OCDheim_UndoTerrainModification", "Undo Terrain Modification", "mud_road_v2", "Hoe", OverlayVisualizer.undo);
+            //AddToolPiece<RedoModificationsOverlayVisualizer>("OCDheim_RedoTerrainModification", "Redo Terrain Modification", "mud_road_v2", "Hoe", OverlayVisualizer.redo);
+            AddToolPiece<RemoveModificationsOverlayVisualizer>("OCDheim_RemoveTerrainModifications", "Remove Terrain Modifications", "mud_road_v2", "Hoe", OverlayVisualizer.remove);
         }
 
-        private void AddToolPiece<TOverlayVisualizer>(string pieceName, string basePieceName, string pieceTable, Texture2D iconTexture, bool level = false, bool raise = false, bool smooth = false, bool paint = false) where TOverlayVisualizer: OverlayVisualizer
+        // `internalName` must not contain a space or '(' - Utils.GetPrefabName() (used when a
+        // TerrainOp is networked) truncates the prefab name at the first one it finds, which
+        // would otherwise hash to the wrong ObjectDB entry.
+        private void AddToolPiece<TOverlayVisualizer>(string internalName, string displayName, string basePieceName, string pieceTable, Texture2D iconTexture, bool level = false, bool raise = false, bool smooth = false, bool paint = false) where TOverlayVisualizer: OverlayVisualizer
         {
-            var pieceExists = PieceManager.Instance.GetPiece(pieceName);
+            var pieceExists = PieceManager.Instance.GetPiece(internalName);
             if (pieceExists != null) { return; }
-            
+
             var pieceIcon = Sprite.Create(iconTexture, new Rect(0, 0, iconTexture.width, iconTexture.height), Vector2.zero);
-            var piece = new CustomPiece(pieceName, basePieceName, new PieceConfig
+            var piece = new CustomPiece(internalName, basePieceName, new PieceConfig
             {
-                Name = pieceName,
+                Name = displayName,
                 Icon = pieceIcon,
                 PieceTable = pieceTable
             });
 
-            var settings = piece.PiecePrefab.GetComponent<TerrainOp>().m_settings;
+            var terrainOp = piece.PiecePrefab.GetComponent<TerrainOp>();
+            var settings = terrainOp.m_settings;
             settings.m_level = level;
             settings.m_raise = raise;
             settings.m_smooth = smooth;
             settings.m_paintCleared = paint;
             piece.PiecePrefab.AddComponent<TOverlayVisualizer>();
 
+            customTerrainOps.Add(terrainOp);
             PieceManager.Instance.AddPiece(piece);
+        }
+
+        // Valheim 1.0 added ObjectDB.m_terrainOpsByHash so TerrainOp networking only has to send
+        // a prefab hash instead of the full Settings payload; the receiving side looks the real
+        // settings up by hash. Jotunn's PrefabManager doesn't know about this table (it never
+        // references TerrainOp at all), so custom TerrainOp pieces never get registered into it
+        // and every use of them fails to deserialize. Re-register ours whenever Valheim rebuilds
+        // the table (on ObjectDB.Awake and after ObjectDB.CopyOtherDB, both of which call this).
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(ObjectDB))]
+        [HarmonyPatch(nameof(ObjectDB.UpdateRegisters))]
+        private static void RegisterCustomTerrainOps(ObjectDB __instance)
+        {
+            foreach (var terrainOp in customTerrainOps)
+            {
+                if (terrainOp == null) { continue; }
+                __instance.m_terrainOpsByHash[terrainOp.gameObject.name.GetStableHashCode()] = terrainOp;
+            }
         }
 
         private void AddOCDheimBuildPieces()

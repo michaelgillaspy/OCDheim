@@ -233,11 +233,11 @@ namespace OCDheim
         [HarmonyPrefix]
         [HarmonyPatch(typeof(TerrainComp))]
         [HarmonyPatch(nameof(TerrainComp.PaintCleared))]
-        private static bool Prefix(Vector3 worldPos, float radius, PaintType paintType, bool heightCheck, bool apply, Heightmap ___m_hmap, ref Color[] ___m_paintMask, ref bool[] ___m_modifiedPaint)
+        private static bool Prefix(Vector3 worldPos, TerrainOp.Settings settings, Heightmap ___m_hmap, ref Color[] ___m_paintMask, ref bool[] ___m_modifiedPaint)
         {
-            if (ClientSideGridModeOverride.IsGridModeEnabled(radius))
+            if (ClientSideGridModeOverride.IsGridModeEnabled(settings.m_paintRadius))
             {
-                PreciseTerrainModifier.RecolorTerrain(worldPos, paintType, ___m_hmap, ref ___m_paintMask, ref ___m_modifiedPaint);
+                PreciseTerrainModifier.RecolorTerrain(worldPos, settings.m_paintType, ___m_hmap, ref ___m_paintMask, ref ___m_modifiedPaint);
                 return false;
             }
 
