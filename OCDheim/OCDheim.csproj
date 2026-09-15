@@ -15,16 +15,14 @@
     <NoWarn>$(NoWarn);MSB3245</NoWarn>
   </PropertyGroup>
 
-  <!-- Local dev override: environment.props sets VALHEIM_INSTALL and BEPINEX_INSTALL to your
-       machine's paths (e.g. an r2modman profile for BepInEx). Edit your local copy, don't commit
-       your personal paths. JotunnLib's own build props already import environment.props from the
-       solution root, so VALHEIM_INSTALL is available here without a second explicit Import. -->
+  <!-- Local dev override: environment.props sets VALHEIM_INSTALL to your machine's Valheim path.
+       Edit your local copy, don't commit your personal path. JotunnLib's own build props already
+       import environment.props from the solution root, so VALHEIM_INSTALL is available here
+       without a second explicit Import. -->
   <PropertyGroup Condition="'$(VALHEIM_INSTALL)' != ''">
+    <BepInExPath>$(VALHEIM_INSTALL)/BepInEx/core</BepInExPath>
+    <PluginPath>$(VALHEIM_INSTALL)/BepInEx/plugins</PluginPath>
     <ValheimData>$(VALHEIM_INSTALL)/valheim_Data/Managed</ValheimData>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BEPINEX_INSTALL)' != ''">
-    <BepInExPath>$(BEPINEX_INSTALL)/core</BepInExPath>
-    <PluginPath>$(BEPINEX_INSTALL)/plugins</PluginPath>
   </PropertyGroup>
 
   <ItemGroup>
