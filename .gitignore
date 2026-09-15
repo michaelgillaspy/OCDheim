@@ -369,7 +369,13 @@ FodyWeavers.xsd
 .idea/
 
 # not the valheim path file
-Environment.props
+environment.props
 
-# not the generated dll for thunderstore
+# not the generated dll/docs for thunderstore
 */Package/plugins/*
+*/Package/CHANGELOG.md
+*/Package/README.md
+*.zip
+
+# not the Unity-built AssetBundles
+Unity/Assets/AssetBundles/
