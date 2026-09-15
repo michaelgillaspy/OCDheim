@@ -60,6 +60,7 @@ namespace OCDheim
 
         private void Awake()
         {
+            ModConfig.Bind(Config);
             harmony.PatchAll();
             gameObject.AddComponent<KeyBinder>();
             PrefabManager.OnVanillaPrefabsAvailable += AddOCDheimToolPieces;
@@ -82,6 +83,8 @@ namespace OCDheim
 
         private void AddOCDheimToolPieces()
         {
+            if (!ModConfig.EnableTerrainModification.Value) { return; }
+
             //AddToolPiece<UndoModificationsOverlayVisualizer>("OCDheim_UndoTerrainModification", "Undo Terrain Modification", "mud_road_v2", "Hoe", OverlayVisualizer.undo);
             //AddToolPiece<RedoModificationsOverlayVisualizer>("OCDheim_RedoTerrainModification", "Redo Terrain Modification", "mud_road_v2", "Hoe", OverlayVisualizer.redo);
             AddToolPiece<RemoveModificationsOverlayVisualizer>("OCDheim_RemoveTerrainModifications", "Remove Terrain Modifications", "mud_road_v2", "Hoe", OverlayVisualizer.remove);
@@ -135,6 +138,11 @@ namespace OCDheim
 
         private void AddOCDheimBuildPieces()
         {
+            // Don't unsubscribe when disabled: OnVanillaPrefabsAvailable re-fires on every
+            // world/server join (it's a postfix on ObjectDB.CopyOtherDB), and EnableAdditionalBuildPieces
+            // is server-synced, so a later join where the server allows it should still add the pieces.
+            if (!ModConfig.EnableAdditionalBuildPieces.Value) { return; }
+
             AddBrickBuildPiece("1x1", new Vector3(0.5f, 1.0f, 0.5f), 3, brick1x1);
             AddBrickBuildPiece("2x1", new Vector3(1.0f, 1.0f, 0.5f), 4, brick2x1);
             AddBrickBuildPiece("1x2", new Vector3(0.5f, 2.0f, 0.5f), 5, brick1x2);
@@ -167,6 +175,8 @@ namespace OCDheim
 
         private void ModVanillaValheimTools()
         {
+            if (!ModConfig.EnableTerrainModification.Value) { return; }
+
             PrefabManager.Instance.GetPrefab("mud_road_v2").AddComponent<LevelGroundOverlayVisualizer>();
             PrefabManager.Instance.GetPrefab("raise_v2").AddComponent<RaiseGroundOverlayVisualizer>();
             PrefabManager.Instance.GetPrefab("path_v2").AddComponent<PaveRoadOverlayVisualizer>();

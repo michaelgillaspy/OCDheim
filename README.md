@@ -89,10 +89,21 @@ Well now they do:
 - if ONLY SOME Players run OCDheim → Players who DO NOT run OCDheim have NO ACCESS to OCDheim functionality
 - if ONLY SOME Players run OCDheim → Players who DO run OCDheim MUST refrain[^5] from using [Additional Build Pieces](#additional-build-pieces)
 
+## Configuration
+Every OCDheim feature can be turned off individually via the BepInEx config file (`BepInEx/config/dymek.dev.OCDheim.cfg`, or in-game via the [Configuration Manager mod](https://valheim.thunderstore.io/package/Azumatt/Official_BepInEx_ConfigurationManager/)):
+- **World Grid Mode**
+- **Precision Mode** (includes Additional Snap Points)
+- **Terrain Modification** (includes the "Remove Terrain Modifications" Hoe piece)
+- **Vertical Stacking**
+- **Additional Build Pieces**
+
+All toggles default to ON, so existing installs keep working exactly as before until you turn something off.
+
+`Terrain Modification` and `Additional Build Pieces` add new pieces and are server-controlled in multiplayer: once connected, a client's local value for those two is overridden by whatever the server has set, since a mismatch there would disagree with the server on what pieces exist. The other three toggles are purely client-side and unaffected by the server's settings.
+
 ## Considered Possible Improvements
 - Config File
 	- Keybinding Overrides
-	- Functional Toggles
 	- Logging Levels
 	- Min/Max Terrain Modification Depth
 - Add `Smooth Slope` Tool → The Hoe (`MOUSE WHEEL SCROLL ↑ or ↓` to precisely fine-tune the Slope °)

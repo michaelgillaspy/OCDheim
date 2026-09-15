@@ -65,8 +65,8 @@ namespace OCDheim
         private static readonly Collider[] NeighbourColliders = new Collider[byte.MaxValue];
         private static readonly List<Piece> NeighbourPieces = new List<Piece>();
 
-        public static bool GridModeRequirementsSatisfied() => player.HasBuildPieceEquipped() || player.HasOverlayVisible();
-        public static bool SnapModeRequirementsSatisfied() => player.HasBuildPieceEquipped() && (buildPiece.Type() != CONSTRUCTION || KeyBinder.precisionMode == SUPERIOR);
+        public static bool GridModeRequirementsSatisfied() => ModConfig.EnableWorldGridMode.Value && (player.HasBuildPieceEquipped() || player.HasOverlayVisible());
+        public static bool SnapModeRequirementsSatisfied() => ModConfig.EnablePrecisionMode.Value && player.HasBuildPieceEquipped() && (buildPiece.Type() != CONSTRUCTION || KeyBinder.precisionMode == SUPERIOR);
         private static bool ShouldUsePlayerPositionAsGroundLevelReference() => player.HasLevelGroundTerraformToolEquipped() && KeyBinder.snapModeEnabled;
 
         [HarmonyPostfix]
