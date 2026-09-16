@@ -254,7 +254,7 @@ namespace OCDheim
         [HarmonyPatch(nameof(TerrainComp.ApplyOperation))]
         private static bool Prefix(TerrainOp modifier)
         {
-            if (KeyBinder.gridModeEnabled)
+            if (KeyBinder.gridModeEnabled && ModConfig.EnableTerrainModification.Value)
             {
                 if (modifier.m_settings.m_smooth)
                 {

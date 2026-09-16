@@ -59,12 +59,12 @@ namespace OCDheim
 
         private void Update()
         {
-            var gridModeButton = ZInput.GetButtonDown(GridModeKey.Name)
-                                 || (snapModeEnabled && ZInput.GetButtonDown(GridModeJoy.Name));
+            var gridModeButton = ModConfig.EnableWorldGridMode.Value && (ZInput.GetButtonDown(GridModeKey.Name)
+                                 || (snapModeEnabled && ZInput.GetButtonDown(GridModeJoy.Name)));
             var toggleGridMode = (gridModeButton && (gridModeEnabled || player.HasConstructionToolEquipped()))
                                  || (gridModeEnabled && !player.HasConstructionToolEquipped());
-            var precisionModeButton = ZInput.GetButtonDown(PrecisionModeKey.Name)
-                                      || (snapModeEnabled && ZInput.GetButtonDown(PrecisionModeJoy.Name));
+            var precisionModeButton = ModConfig.EnablePrecisionMode.Value && (ZInput.GetButtonDown(PrecisionModeKey.Name)
+                                      || (snapModeEnabled && ZInput.GetButtonDown(PrecisionModeJoy.Name)));
             var togglePrecisionMode = (precisionModeButton && (precisionMode == SUPERIOR || player.HasBuildPieceEquipped()))
                                       || (precisionMode == SUPERIOR && !player.HasBuildPieceEquipped());
 

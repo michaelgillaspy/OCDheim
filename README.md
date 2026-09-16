@@ -1,4 +1,7 @@
 # OCDheim - DEATH TO EYEBALLING!
+
+> **This is a fork.** The original OCDheim is by [java-devil](https://github.com/java-devil/OCDheim) - all credit for the mod's design and original implementation goes to them. Valheim 1.0 broke it, and I'm not a programmer and don't have time to learn how to mod Valheim and maintain a mod myself, so I've been maintaining this fork with AI assistance to restore compatibility and add a few small improvements. Consider this a stopgap until the original author has time to update the upstream project.
+
 The purpose of this mod is for me, a person suffering from severe OCD, to be able to enjoy Valheim in its full Glory™ while keeping noninvasive, consistent and respectful of the intended OG experience.
 
 OCDheim is an opinionated collection of building and terraforming tools that bring 22nd-century-level laser precision to... your merry Viking settlement of 'Stokhölm' 🍻❤️
@@ -89,10 +92,21 @@ Well now they do:
 - if ONLY SOME Players run OCDheim → Players who DO NOT run OCDheim have NO ACCESS to OCDheim functionality
 - if ONLY SOME Players run OCDheim → Players who DO run OCDheim MUST refrain[^5] from using [Additional Build Pieces](#additional-build-pieces)
 
+## Configuration
+Every OCDheim feature can be turned off individually via the BepInEx config file (`BepInEx/config/dymek.dev.OCDheim.cfg`, or in-game via the [Configuration Manager mod](https://valheim.thunderstore.io/package/Azumatt/Official_BepInEx_ConfigurationManager/)):
+- **World Grid Mode**
+- **Precision Mode** (includes Additional Snap Points)
+- **Terrain Modification** (includes the "Remove Terrain Modifications" Hoe piece)
+- **Vertical Stacking**
+- **Additional Build Pieces**
+
+All toggles default to ON, so existing installs keep working exactly as before until you turn something off.
+
+`Terrain Modification` and `Additional Build Pieces` add new pieces and are server-controlled in multiplayer: once connected, a client's local value for those two is overridden by whatever the server has set, since a mismatch there would disagree with the server on what pieces exist. The other three toggles are purely client-side and unaffected by the server's settings.
+
 ## Considered Possible Improvements
 - Config File
 	- Keybinding Overrides
-	- Functional Toggles
 	- Logging Levels
 	- Min/Max Terrain Modification Depth
 - Add `Smooth Slope` Tool → The Hoe (`MOUSE WHEEL SCROLL ↑ or ↓` to precisely fine-tune the Slope °)
