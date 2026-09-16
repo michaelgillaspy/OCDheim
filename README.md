@@ -1,4 +1,7 @@
 # OCDheim - DEATH TO EYEBALLING!
+
+> **This is a fork.** The original OCDheim is by [java-devil](https://github.com/java-devil/OCDheim) - all credit for the mod's design and original implementation goes to them. Valheim 1.0 broke it, and I'm not a programmer and don't have time to learn how to mod Valheim and maintain a mod myself, so I've been maintaining this fork with AI assistance to restore compatibility and add a few small improvements. Consider this a stopgap until the original author has time to update the upstream project.
+
 The purpose of this mod is for me, a person suffering from severe OCD, to be able to enjoy Valheim in its full Glory™ while keeping noninvasive, consistent and respectful of the intended OG experience.
 
 OCDheim is an opinionated collection of building and terraforming tools that bring 22nd-century-level laser precision to... your merry Viking settlement of 'Stokhölm' 🍻❤️
