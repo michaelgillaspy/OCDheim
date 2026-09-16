@@ -124,9 +124,12 @@ All toggles default to ON, so existing installs keep working exactly as before u
 - Revise compatibility issues with other mods
 
 ## Known Issues
-https://github.com/java-devil/OCDheim/issues
+https://github.com/michaelgillaspy/OCDheim/issues
 
-## Acknowledgments
+## Acknowledgments (from this fork's maintainer)
+- java-devil, for creating OCDheim in the first place - this fork only exists to keep their work running on Valheim 1.0
+
+## Acknowledgments (from the original author)
 - My Wife.
 - My Wife once more.
 - Seriously Guys, my Wife. She screened my ideas. Helped test them. Helped with the GUI elements. Recorded the hilarious promotional video for you to enjoy. Provided me with back rubs and brain rubs... not to mention two kids and more love than I would possibly know what to with.
