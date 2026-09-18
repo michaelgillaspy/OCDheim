@@ -50,7 +50,7 @@ namespace OCDheim
             base.OnRefresh();
             if (KeyBinder.gridModeEnabled)
             {
-                spinner.Refresh();
+                // spinner is advanced by KeyBinder.Update(), not here - see KeyBinder.cs for why.
                 secondary.localPosition = new Vector3(0f, spinner.value, 0f);
 
                 hoverInfo.text = spinner.value > 0f

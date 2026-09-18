@@ -71,7 +71,10 @@ namespace OCDheim
             }
         }
 
-        private void Update()
+        // Driven by OverlayDriver rather than being a Unity Update() message: Valheim toggles the
+        // placement ghost's active state every frame while the inventory is closed, so Unity keeps
+        // skipping this object's slot in the update list and its own Update() never runs at all.
+        public void Tick()
         {
             if (KeyBinder.gridModFreshlyEnabled)
             {
@@ -82,7 +85,7 @@ namespace OCDheim
             {
                 OnDisableGrid();
             }
-            
+
             if (KeyBinder.gridModeEnabled)
             {
                 EnableOverlayCamera();
