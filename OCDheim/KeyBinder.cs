@@ -3,6 +3,7 @@ using Jotunn.Configs;
 using Jotunn.Managers;
 using UnityEngine;
 
+using static OCDheim.GroundLevelSpinner;
 using static OCDheim.PlayerHelpers;
 using static OCDheim.PrecisionMode;
 
@@ -78,16 +79,35 @@ namespace OCDheim
                 precisionMode = precisionMode == ORDINARY ? SUPERIOR : ORDINARY;
                 Logger.Info(() => $"[{(precisionMode == SUPERIOR ? "ENABLED" : "DISABLED")}] PRECISION MODE");
             }
+
+            // Scroll is sampled and applied here, from a persistent component that ticks every
+            // frame, rather than from the placement ghost's own Update(). The ghost's Update() can
+            // be starved indefinitely (Valheim toggles the ghost's active state per frame while the
+            // inventory is closed, so Unity keeps skipping its slot), and scroll-wheel deltas are
+            // single-frame pulses - sampling from the ghost missed them entirely.
+            var tickScrollΔ = SampleScrollΔ();
+            if (tickScrollΔ != 0)
+            {
+                pendingScrollΔ += tickScrollΔ;
+            }
+
+            if (gridModeEnabled && player.HasRaiseGroundTerraformToolEquipped())
+            {
+                RaiseGroundSpinner.Refresh();
+                LowerGroundSpinner.Refresh();
+            }
         }
 
-        public static float ScrollΔ()
+        private static float pendingScrollΔ;
+
+        private static float SampleScrollΔ()
         {
             var scrollΔ = Input.GetAxis(MouseScrollWheel);
             if (scrollΔ != 0)
             {
                 return scrollΔ > 0 ? ScrollPrecision : - ScrollPrecision;
             }
-            
+
             if (ZInput.GetButton(JoyScrollUnlock) && ZInput.GetButtonDown(JoyScrollDown))
             {
                 return - ScrollPrecision;
@@ -98,6 +118,13 @@ namespace OCDheim
                 return ScrollPrecision;
             }
 
+            return scrollΔ;
+        }
+
+        public static float ScrollΔ()
+        {
+            var scrollΔ = pendingScrollΔ;
+            pendingScrollΔ = 0f;
             return scrollΔ;
         }
     }

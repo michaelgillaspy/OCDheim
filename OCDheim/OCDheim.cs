@@ -63,6 +63,7 @@ namespace OCDheim
             ModConfig.Bind(Config);
             harmony.PatchAll();
             gameObject.AddComponent<KeyBinder>();
+            gameObject.AddComponent<OverlayDriver>();
             PrefabManager.OnVanillaPrefabsAvailable += AddOCDheimToolPieces;
             PrefabManager.OnVanillaPrefabsAvailable += AddOCDheimBuildPieces;
             PrefabManager.OnVanillaPrefabsAvailable += ModVanillaValheimTools;
