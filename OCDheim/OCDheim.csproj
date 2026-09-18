@@ -25,6 +25,14 @@
     <ValheimData>$(VALHEIM_INSTALL)/valheim_Data/Managed</ValheimData>
   </PropertyGroup>
 
+  <!-- r2modman keeps BepInEx per-profile rather than in the base Valheim folder. Deploys into the
+       existing Thunderstore-managed mod folder so the build never creates a second, ambiguous copy
+       of OCDheim.dll directly under plugins/. -->
+  <PropertyGroup Condition="'$(R2MODMAN_PROFILE)' != ''">
+    <BepInExPath>$(R2MODMAN_PROFILE)/BepInEx/core</BepInExPath>
+    <PluginPath>$(R2MODMAN_PROFILE)/BepInEx/plugins/javadevils-OCDheim</PluginPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JotunnLib" Version="2.30.0" />
     <ResourceFiles Include="Resources/**/*.*"/>
